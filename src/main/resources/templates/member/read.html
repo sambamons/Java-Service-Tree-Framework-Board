@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('회원 상세')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <h1>회원 상세</h1>
+    <div class="card">
+    <table class="table-kv">
+        <tr><th>번호</th><td th:text="${member.id}">1</td></tr>
+        <tr><th>아이디</th><td th:text="${member.memberId}">아이디</td></tr>
+        <tr><th>이메일</th><td th:text="${member.memberEmail}">이메일</td></tr>
+        <tr><th>이름</th><td th:text="${member.memberName}">이름</td></tr>
+    </table>
+    </div>
+    <p><a th:href="@{/member/list}" class="btn btn-secondary">목록으로</a></p>
+</main>
+</body>
+</html>

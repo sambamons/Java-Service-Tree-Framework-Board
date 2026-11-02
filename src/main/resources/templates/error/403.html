@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('오류 403')}"></head>
+<body>
+<main>
+    <div class="card empty-state">
+    <h1>403</h1>
+    <p>이 작업을 할 권한이 없습니다.</p>
+    <p class="btn-group"><a th:href="@{/}" class="btn btn-primary">메인으로</a><span class="sep" aria-hidden="true">·</span><a th:href="@{/board}" class="btn btn-secondary">자유게시판</a></p>
+    </div>
+</main>
+</body>
+</html>

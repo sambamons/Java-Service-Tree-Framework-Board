@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('로그인')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <div class="card card--narrow">
+    <h1>로그인</h1>
+    <p class="error alert alert-error" th:if="${loginError != null}" th:text="${loginError}"></p>
+    <form th:action="@{/member/login}" th:object="${loginForm}" method="post" class="form">
+        <input type="hidden" name="redirectURL" th:value="${redirectURL}" th:if="${redirectURL != null}">
+        <label>이메일
+            <input type="email" th:field="*{memberEmail}" th:errorclass="is-invalid">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('memberEmail')}" th:errors="*{memberEmail}"></p>
+        <label>비밀번호
+            <input type="password" th:field="*{memberPassword}" th:errorclass="is-invalid">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('memberPassword')}" th:errors="*{memberPassword}"></p>
+        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+    </form>
+    <p><a th:href="@{/member/join}">회원가입</a></p>
+    </div>
+</main>
+</body>
+</html>

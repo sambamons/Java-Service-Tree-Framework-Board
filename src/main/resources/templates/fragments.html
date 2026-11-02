@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">게시판</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav th:fragment="nav" class="nav">
+    <a th:href="@{/}">홈</a>
+    <a th:href="@{/board}">자유게시판</a>
+    <th:block th:if="${loginMember == null}">
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/join}">회원가입</a>
+    </th:block>
+    <th:block th:if="${loginMember != null}">
+        <a th:href="@{/member/list}">회원목록</a>
+        <span class="who" th:text="${loginMember.memberName} + ' (' + ${loginMember.memberEmail} + ')'">이름</span>
+        <form th:action="@{/member/logout}" method="post" class="inline">
+            <button type="submit" class="btn btn-sm btn-secondary">로그아웃</button>
+        </form>
+    </th:block>
+</nav>
+</body>
+</html>

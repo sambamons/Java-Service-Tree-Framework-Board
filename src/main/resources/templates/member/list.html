@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('회원목록')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <h1>회원목록</h1>
+    <div class="card table-wrap">
+    <table class="table-stack">
+        <thead>
+        <tr><th class="col-num">번호</th><th>아이디</th><th>이메일</th><th>이름</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td class="col-num" data-label="번호" th:text="${member.id}">1</td>
+            <td data-label="아이디" th:text="${member.memberId}">아이디</td>
+            <td data-label="이메일" th:text="${member.memberEmail}">이메일</td>
+            <td data-label="이름" th:text="${member.memberName}">이름</td>
+            <td class="cell-actions">
+                <a th:href="@{/member/{id}(id=${member.id})}" class="btn btn-sm btn-secondary">상세</a>
+                <form th:if="${loginMember.isSelf(member.id)}" th:action="@{/member/delete/{id}(id=${member.id})}"
+                      method="post" class="inline" onsubmit="return confirm('탈퇴하면 작성한 글과 댓글도 삭제됩니다. 계속할까요?');">
+                    <button type="submit" class="btn btn-sm btn-danger">탈퇴</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+</main>
+</body>
+</html>

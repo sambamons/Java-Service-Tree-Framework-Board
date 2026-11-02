@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${mode == 'edit'} ? '글 수정' : '글쓰기')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <div class="card">
+    <h1 th:text="${mode == 'edit'} ? '글 수정' : '글쓰기'">글쓰기</h1>
+    <form th:action="${mode == 'edit'} ? @{/board/{id}/edit(id=${postId})} : @{/board/write}"
+          th:object="${boardForm}" method="post" class="form">
+        <label>제목
+            <input type="text" th:field="*{title}" th:errorclass="is-invalid" maxlength="100">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
+        <label>내용
+            <textarea th:field="*{content}" th:errorclass="is-invalid" rows="12"></textarea>
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+        <button type="submit" class="btn btn-primary">저장</button>
+    </form>
+    </div>
+    <p>
+        <a th:if="${mode == 'edit'}" th:href="@{/board/{id}(id=${postId})}" class="btn btn-secondary">취소</a>
+        <a th:unless="${mode == 'edit'}" th:href="@{/board}" class="btn btn-secondary">취소</a>
+    </p>
+</main>
+</body>
+</html>

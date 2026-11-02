@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('메인')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <h1>회원·게시판</h1>
+    <div class="card" th:if="${loginMember == null}">
+        <p>로그인하지 않았습니다.</p>
+        <div class="btn-group">
+            <a th:href="@{/member/login}" class="btn btn-primary">로그인</a><span class="sep" aria-hidden="true">·</span><a th:href="@{/member/join}" class="btn btn-secondary">회원가입</a>
+        </div>
+    </div>
+    <div class="card" th:if="${loginMember != null}">
+        <p>
+            <strong th:text="${loginMember.memberName}">이름</strong>님 환영합니다.
+            (<span th:text="${loginMember.memberEmail}">이메일</span>)
+        </p>
+        <div class="btn-group">
+            <a th:href="@{/member/list}" class="btn btn-secondary">회원목록</a>
+            <form th:action="@{/member/logout}" method="post" class="inline">
+                <button type="submit" class="btn btn-secondary">로그아웃</button>
+            </form>
+        </div>
+    </div>
+    <p><a th:href="@{/board}" class="btn btn-primary">자유게시판 바로가기</a></p>
+</main>
+</body>
+</html>

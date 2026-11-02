@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('오류 404')}"></head>
+<body>
+<main>
+    <div class="card empty-state">
+    <h1>404</h1>
+    <p>요청한 대상을 찾을 수 없습니다.</p>
+    <p class="btn-group"><a th:href="@{/}" class="btn btn-primary">메인으로</a><span class="sep" aria-hidden="true">·</span><a th:href="@{/board}" class="btn btn-secondary">자유게시판</a></p>
+    </div>
+</main>
+</body>
+</html>

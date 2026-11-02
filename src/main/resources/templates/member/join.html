@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('회원가입')}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main>
+    <div class="card card--narrow">
+    <h1>회원가입</h1>
+    <form th:action="@{/member/join}" th:object="${joinForm}" method="post" class="form">
+        <label>아이디
+            <input type="text" th:field="*{memberId}" th:errorclass="is-invalid" maxlength="20">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('memberId')}" th:errors="*{memberId}"></p>
+
+        <div class="field">
+            <label for="memberEmail">이메일</label>
+            <span class="row">
+                <input type="email" th:field="*{memberEmail}" th:errorclass="is-invalid" maxlength="20">
+                <button type="button" id="emailCheckButton" class="btn btn-secondary" th:data-url="@{/member/email-check}">체크</button>
+            </span>
+        </div>
+        <p class="error" th:if="${#fields.hasErrors('memberEmail')}" th:errors="*{memberEmail}"></p>
+
+        <label>비밀번호
+            <input type="password" th:field="*{memberPassword}" th:errorclass="is-invalid" maxlength="72">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('memberPassword')}" th:errors="*{memberPassword}"></p>
+
+        <label>이름
+            <input type="text" th:field="*{memberName}" th:errorclass="is-invalid" maxlength="20">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"></p>
+
+        <button type="submit" class="btn btn-primary btn-block">가입</button>
+    </form>
+    </div>
+</main>
+<script>
+    // 이메일 형식 확인 후 서버에 중복 여부를 묻는다(REQ-F-002). 가입 제출 시에도 서버가 다시 검사한다.
+    document.getElementById('emailCheckButton').addEventListener('click', function () {
+        var input = document.getElementById('memberEmail');
+        var email = input.value.trim();
+        if (email === '') {
+            alert('이메일을 입력하세요.');
+            return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 20) {
+            alert('이메일 형식이 올바르지 않거나 20자를 넘습니다.');
+            return;
+        }
+        fetch(this.dataset.url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'memberEmail=' + encodeURIComponent(email)
+        }).then(function (response) {
+            return response.text();
+        }).then(function (result) {
+            if (result === 'OK') {
+                alert('사용가능한 이메일입니다.');
+            } else {
+                alert('이미 사용 중인 이메일입니다.');
+                input.value = '';
+            }
+        }).catch(function () {
+            alert('중복 확인 중 오류가 발생했습니다.');
+        });
+    });
+</script>
+</body>
+</html>

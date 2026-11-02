@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head(${post.title})}"></head>
+<body>
+<div th:replace="~{fragments :: nav}"></div>
+<main th:with="isWriter=${loginMember != null and loginMember.isSelf(post.writerId)}">
+    <article class="card">
+    <h1 th:text="${post.title}">제목</h1>
+    <p class="meta">
+        <span th:text="${post.writerName}">작성자</span> ·
+        작성 <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span> ·
+        수정 <span th:text="${#temporals.format(post.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>
+    </p>
+    <div class="content" th:text="${post.content}">내용</div>
+
+    <div class="actions" th:if="${isWriter}">
+        <a th:href="@{/board/{id}/edit(id=${post.id})}" class="btn btn-secondary">수정</a>
+        <form th:action="@{/board/{id}/delete(id=${post.id})}" method="post" class="inline"
+              onsubmit="return confirm('게시글과 댓글이 모두 삭제됩니다. 계속할까요?');">
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+    </div>
+    <p><a th:href="@{/board}" class="btn btn-secondary">목록으로</a></p>
+    </article>
+
+    <section class="comments card">
+        <h2>댓글 <span th:text="${comments.size()}">0</span></h2>
+        <p class="error alert alert-error" th:if="${commentError != null}" th:text="${commentError}"></p>
+        <div class="comment" th:each="comment : ${comments}">
+            <p class="meta">
+                <span th:text="${comment.writerName}">작성자</span> ·
+                <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+            </p>
+            <div class="content" th:text="${comment.content}">댓글</div>
+            <th:block th:if="${loginMember != null and loginMember.isSelf(comment.writerId)}">
+                <div class="comment-actions">
+                <details>
+                    <summary class="btn btn-sm btn-secondary">수정</summary>
+                    <form th:action="@{/comments/{id}/edit(id=${comment.id})}" method="post">
+                        <textarea name="content" maxlength="500" aria-label="댓글 수정 내용" th:text="${comment.content}"></textarea>
+                        <button type="submit" class="btn btn-sm btn-primary">저장</button>
+                    </form>
+                </details>
+                <form th:action="@{/comments/{id}/delete(id=${comment.id})}" method="post" class="inline"
+                      onsubmit="return confirm('댓글을 삭제할까요?');">
+                    <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                </form>
+                </div>
+            </th:block>
+        </div>
+
+        <form th:if="${loginMember != null}" th:action="@{/board/{id}/comments(id=${post.id})}"
+              th:object="${commentForm}" method="post" class="form">
+            <textarea th:field="*{content}" th:errorclass="is-invalid" maxlength="500" placeholder="댓글을 입력하세요" aria-label="댓글 내용"></textarea>
+            <button type="submit" class="btn btn-primary">댓글 등록</button>
+        </form>
+        <p th:if="${loginMember == null}">
+            댓글을 쓰려면 <a th:href="@{/member/login(redirectURL='/board/' + ${post.id})}">로그인</a>하세요.
+        </p>
+    </section>
+</main>
+</body>
+</html>
