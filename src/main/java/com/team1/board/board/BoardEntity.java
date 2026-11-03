@@ -22,6 +22,9 @@ import javax.persistence.Table;
 @Table(name = "board_table", indexes = @Index(name = "idx_board_type_id", columnList = "board_type, id"))
 public class BoardEntity {
 
+    /** 제목 컬럼 길이. 게시글 입력 검증(BoardForm)이 같은 값을 쓴다. */
+    public static final int TITLE_MAX_LENGTH = 100;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +33,7 @@ public class BoardEntity {
     @Column(name = "board_type", nullable = false, length = 20)
     private BoardType boardType;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = TITLE_MAX_LENGTH)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")

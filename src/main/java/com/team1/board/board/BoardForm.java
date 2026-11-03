@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class BoardForm {
 
     @NotBlank(message = "제목을 입력하세요.")
-    @Size(max = 100, message = "제목은 100자 이내여야 합니다.")
+    @Size(max = BoardEntity.TITLE_MAX_LENGTH, message = "제목은 100자 이내여야 합니다.")
     private String title;
 
     @NotBlank(message = "내용을 입력하세요.")

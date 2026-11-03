@@ -49,9 +49,7 @@ public class BoardController {
     public String detail(@PathVariable Long id, Model model) {
         model.addAttribute("post", boardService.get(id));
         model.addAttribute("comments", commentService.listByBoard(id));
-        if (!model.containsAttribute("commentForm")) {
-            model.addAttribute("commentForm", new CommentForm());
-        }
+        model.addAttribute("commentForm", new CommentForm());
         return "board/detail";
     }
 

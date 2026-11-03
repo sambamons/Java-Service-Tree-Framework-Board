@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class CommentForm {
 
     @NotBlank(message = "댓글을 입력하세요.")
-    @Size(max = 500, message = "댓글은 500자 이내여야 합니다.")
+    @Size(max = CommentEntity.CONTENT_MAX_LENGTH, message = "댓글은 500자 이내여야 합니다.")
     private String content;
 
     public String getContent() {

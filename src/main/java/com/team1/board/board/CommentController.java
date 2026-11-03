@@ -30,9 +30,9 @@ public class CommentController {
                         RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(COMMENT_ERROR, firstError(bindingResult));
-            return "redirect:/board/" + boardId;
+            return redirectToPost(boardId);
         }
-        return "redirect:/board/" + commentService.write(boardId, commentForm, loginMember);
+        return redirectToPost(commentService.write(boardId, commentForm, loginMember));
     }
 
     @PostMapping("/comments/{commentId:\\d+}/edit")
@@ -44,15 +44,20 @@ public class CommentController {
             // 권한·존재 검사를 먼저 거친 뒤 오류를 돌려준다
             Long boardId = commentService.boardIdOfOwned(commentId, loginMember);
             redirectAttributes.addFlashAttribute(COMMENT_ERROR, firstError(bindingResult));
-            return "redirect:/board/" + boardId;
+            return redirectToPost(boardId);
         }
-        return "redirect:/board/" + commentService.update(commentId, commentForm, loginMember);
+        return redirectToPost(commentService.update(commentId, commentForm, loginMember));
     }
 
     @PostMapping("/comments/{commentId:\\d+}/delete")
     public String delete(@PathVariable Long commentId,
                          @SessionAttribute(SessionConst.LOGIN_INFO) LoginMember loginMember) {
-        return "redirect:/board/" + commentService.delete(commentId, loginMember);
+        return redirectToPost(commentService.delete(commentId, loginMember));
+    }
+
+    /** 처리 후 돌아갈 게시글 상세 주소. */
+    private String redirectToPost(Long boardId) {
+        return "redirect:/board/" + boardId;
     }
 
     private String firstError(BindingResult bindingResult) {

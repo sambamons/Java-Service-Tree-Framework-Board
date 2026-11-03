@@ -91,20 +91,14 @@ public class MemberController {
             model.addAttribute("loginError", LOGIN_ERROR);
             return "member/login";
         }
-        HttpSession oldSession = request.getSession(false);
-        if (oldSession != null) {
-            oldSession.invalidate(); // 세션 고정 방지
-        }
+        invalidateSession(request); // 세션 고정 방지
         request.getSession(true).setAttribute(SessionConst.LOGIN_INFO, loginMember.get());
         return "redirect:" + RedirectPaths.safeInternal(redirectURL);
     }
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        invalidateSession(request);
         return "redirect:/member/login";
     }
 
@@ -125,7 +119,15 @@ public class MemberController {
                          @SessionAttribute(SessionConst.LOGIN_INFO) LoginMember loginMember,
                          HttpServletRequest request) {
         memberService.delete(id, loginMember);
-        request.getSession().invalidate();
+        invalidateSession(request);
         return "redirect:/";
+    }
+
+    /** 세션이 있으면 무효화한다. 없으면 새로 만들지 않는다. */
+    private void invalidateSession(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }

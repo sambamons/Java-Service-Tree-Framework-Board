@@ -19,6 +19,9 @@ import javax.persistence.Table;
 @Table(name = "comment_table")
 public class CommentEntity {
 
+    /** 내용 컬럼 길이. 댓글 입력 검증(CommentForm)이 같은 값을 쓴다. */
+    public static final int CONTENT_MAX_LENGTH = 500;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,7 +34,7 @@ public class CommentEntity {
     @JoinColumn(name = "writer_id", nullable = false)
     private MemberEntity writer;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = CONTENT_MAX_LENGTH)
     private String content;
 
     @Column(name = "created_at", nullable = false)
